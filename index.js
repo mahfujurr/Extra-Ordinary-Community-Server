@@ -70,35 +70,34 @@ async function run() {
         });
 
         app.get('/comments', async (req, res) => {
+            
             const query = {};
+            const result = await commentsCollection.find(query).toArray();
+            res.send(result);
+        });
+        app.get('/comments/:postid', async (req, res) => {
+            const postId = req.params.postid
+            const query = {postId: postId};
             const result = await commentsCollection.find(query).toArray();
             res.send(result);
         });
 
         //users section
-        
+
         app.post('/userinfo', async (req, res) => {
-            const comment = req.body;
-            const result = await usersCollection.insertOne(comment);
+            const users = req.body;
+            const result = await usersCollection.insertOne(users);
             res.send(result);
         });
 
-        // app.get('/jwt', async (req, res) => {
-        //     const email = req.query.email;
-        //     const query = { email: email };
-        //     const user = await usersCollection.findOne(query);
-        //     if (user) {
-        //         const token = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
-        //         return res.send({ accessToken: token });
-        //     }
-        //     res.status(403).send({ accessToken: '' })
-        // });
-        // // user management section
-        // app.post('/users', async (req, res) => {
-        //     const user = req.body;
-        //     const result = await usersCollection.insertOne(user);
-        //     res.send(result);
-        // });
+        app.get('/userinfo/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = {email: email};
+            const result = await usersCollection.findOne(query);
+            res.send(result);
+        });
+
+       
 
 
 
@@ -121,7 +120,7 @@ async function run() {
 run().catch(console.log);
 
 app.get('/', async (req, res) => {
-    res.send('recycleLiB server is running');
+    res.send('eoc server is running');
 })
 
-app.listen(port, () => console.log(`recycleLib running on ${port}`))
+app.listen(port, () => console.log(`eoc running on ${port}`))
